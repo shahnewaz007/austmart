@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:weightSum="10"
+    android:orientation="vertical">
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:background="@drawable/background2"
+
+            >
+
+
+
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/post_user_photo"
+                android:layout_width="61dp"
+                android:layout_height="61dp"
+                android:layout_alignParentEnd="true"
+
+
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/avatar"
+                app:civ_border_color="#ffffff"
+                app:civ_border_width="2dp" />
+
+
+            <EditText
+                android:id="@+id/product_name_post"
+                android:layout_width="300dp"
+                android:layout_height="57dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="86dp"
+                android:background="@drawable/reg_editext_style"
+                android:hint="Product Name" />
+
+            <EditText
+                android:id="@+id/price_post"
+                android:layout_width="300dp"
+                android:layout_height="57dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+
+                android:layout_marginTop="158dp"
+                android:background="@drawable/reg_editext_style"
+                android:hint="Price (TK)"
+                android:inputType="text|number" />
+
+
+            <EditText
+                android:id="@+id/description_post"
+                android:layout_width="300dp"
+                android:layout_height="113dp"
+
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="228dp"
+                android:background="@drawable/reg_editext_style"
+                android:hint="Description" />
+
+
+            <ImageView
+                android:id="@+id/popup_product_image"
+                android:layout_width="294dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="20dp"
+
+
+                android:layout_below="@+id/description_post"
+                android:layout_centerHorizontal="true"
+
+                android:background="#452020"
+                android:scaleType="centerCrop" />
+
+
+            <ImageView
+
+                android:id="@+id/post_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/popup_product_image"
+                android:layout_centerHorizontal="true"
+
+
+                android:layout_marginTop="20dp"
+                android:background="@drawable/circle_bg"
+                android:padding="8dp"
+                android:src="@drawable/post" />
+
+            <ProgressBar
+                android:id="@+id/progressBar_post"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/popup_product_image"
+
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+
+                android:background="@drawable/circle_bg"
+                android:padding="4dp"
+                android:visibility="invisible" />
+
+
+        </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</android.support.v7.widget.LinearLayoutCompat>
