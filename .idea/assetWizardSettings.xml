@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="56" />
+                                                <entry key="scalingPercent" value="67" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -33,7 +33,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="C:\Projects\AustMart\app\src\main\res\drawable-hdpi\logo.png" />
+                                      <entry key="foregroundImage" value="C:\Projects\AustMart\app\src\main\res\drawable\app_icon.jpg" />
                                     </map>
                                   </option>
                                 </PersistentState>
