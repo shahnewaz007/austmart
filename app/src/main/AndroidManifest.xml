@@ -25,7 +25,9 @@
         <activity
             android:name=".activities.Home"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activities.ProductDetailsActivity" />
+        <activity android:name=".activities.Chat.MessageActivity"></activity>
     </application>
 
 </manifest>

@@ -54,8 +54,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int PReqCode = 2;
-    private static final int REQUESCODE = 2;
+    private static final int PReqCode = 2;  //for requesting permission to access external storage
+    private static final int REQUESCODE = 2;  //used in startActivityForResult for gallery intent
     FirebaseAuth mAuth;
         FirebaseUser currentUser;
         Dialog popAddPost;
@@ -112,7 +112,7 @@ public class Home extends AppCompatActivity
 
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit(); //open the home fragment
 
 
 
@@ -258,7 +258,7 @@ public class Home extends AppCompatActivity
                                             popupDescription.getText().toString(),
                                             productPrice,
                                             currentUser.getUid(), imageDownloadLink,
-                                            currentUser.getPhotoUrl().toString());
+                                            currentUser.getPhotoUrl().toString(),currentUser.getDisplayName().toString());
 
                                     //upload post to firebase data base
 

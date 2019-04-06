@@ -10,10 +10,11 @@ public class Post {
     private String price;
     private String userID;
     private String productPhoto;
+    private String userName;
     private String userPhoto;
     private Object timeStamp;
 
-    public Post(String productName, String description, String price, String userID, String productPhoto, String userPhoto) {
+    public Post(String productName, String description, String price, String userID, String productPhoto, String userPhoto, String userName) {
         this.productName = productName;
         this.description = description;
         this.price = price;
@@ -21,10 +22,19 @@ public class Post {
         this.productPhoto = productPhoto;
         this.userPhoto = userPhoto;
         this.timeStamp = ServerValue.TIMESTAMP;
+        this.userName = userName;
     }
 
     public Post() {
 
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPostKey() {
