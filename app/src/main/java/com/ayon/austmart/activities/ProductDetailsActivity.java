@@ -6,10 +6,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ayon.austmart.Models.Post;
 import com.ayon.austmart.R;
 import com.ayon.austmart.activities.Chat.MessageActivity;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
 import java.text.MessageFormat;
@@ -20,8 +27,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     String postKey;
 
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
 
-    ImageView imgSeller, imgproduct, imgMessage;
+
+
+    ImageView imgSeller, imgproduct, imgMessage,addwish;
     TextView txtProductName, txtProductPrice, txtdate, txtProductDetails, txtSellerName;
 
     @Override
@@ -38,21 +49,25 @@ public class ProductDetailsActivity extends AppCompatActivity {
         txtProductPrice = findViewById(R.id.details_Product_price);
         txtProductDetails =findViewById(R.id.details_Product_details);
         txtSellerName = findViewById(R.id.details_seller_name);
+        addwish = findViewById(R.id.addtowishlist);
+
+        mAuth =FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
 
 
-        String productImage = getIntent().getExtras().getString("productImage");
+        final String productImage = getIntent().getExtras().getString("productImage");
         Glide.with(this).load(productImage).into(imgproduct);
 
-        String productTitle = getIntent().getExtras().getString("Product Name");
+        final String productTitle = getIntent().getExtras().getString("Product Name");
         txtProductName.setText(productTitle);
 
-        String productPrice = getIntent().getExtras().getString("productPrice");
+        final String productPrice = getIntent().getExtras().getString("productPrice");
         txtProductPrice.setText(productPrice);
 
         final String sellerImg = getIntent().getExtras().getString("User Photo");
         Glide.with(this).load(sellerImg).into(imgSeller);
 
-        String productDescription = getIntent().getExtras().getString("Description");
+        final String productDescription = getIntent().getExtras().getString("Description");
         txtProductDetails.setText(productDescription);
 
         postKey = getIntent().getExtras().getString("Product key");
@@ -67,16 +82,36 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
         imgMessage.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View v) {
-                Intent messageActivity = new Intent(ProductDetailsActivity.this, MessageActivity.class);
 
-                messageActivity.putExtra("UserName", userName);
-                messageActivity.putExtra("UserImg", sellerImg);
-                messageActivity.putExtra("UserID", userID);
+                if (userID.equals(currentUser.getUid())) {
 
 
-                startActivity(messageActivity);
+
+
+                    Toast.makeText(getApplicationContext(), "You can't message yourself!!", Toast.LENGTH_LONG).show();
+
+                }
+                else{
+
+
+                    Intent messageActivity = new Intent(ProductDetailsActivity.this, MessageActivity.class);
+
+                    messageActivity.putExtra("UserName", userName);
+                    messageActivity.putExtra("UserImg", sellerImg);
+                    messageActivity.putExtra("UserID", userID);
+
+
+
+
+
+                    startActivity(messageActivity);
+
+
+            }
 
 
             }
@@ -86,6 +121,32 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
 
+
+
+
+
+        addwish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                //now creating post object
+
+
+                Post post = new Post(productTitle,
+                        productDescription,
+                        productPrice,
+                        currentUser.getUid(), productImage,
+                        sellerImg,userName);
+
+                //upload post to firebase data base
+
+                addPost(post);
+
+
+            }
+        });
 
 
 
@@ -106,4 +167,38 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
     }
+
+
+
+    private void addPost(Post post) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Wish List Product Posts").push();
+
+        //get unique id and update post key
+
+        String Key = myRef.getKey();
+        post.setPostKey(Key);
+
+        //add post key to firebase database
+
+        myRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+                showMessage("Added to Wish List!");
+
+
+
+
+            }
+        });
+    }
+
+
+    private void showMessage(String message) {
+        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
+
+    }
+
+
 }
