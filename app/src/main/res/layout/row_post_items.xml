@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="390dp"
+    android:background="@drawable/background2"
+
+    >
+
+
+
+
+    <ImageView
+        android:id="@+id/product_image_row"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="260dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profile_background"/>
+
+    <TextView
+    android:id="@+id/Product_name_row"
+    android:layout_width="218dp"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignStart="@+id/product_image_row"
+    android:layout_marginBottom="73dp"
+    android:fontFamily="serif"
+    android:text="TextView"
+    android:textSize="18dp" />
+
+
+    <TextView
+        android:id="@+id/Product_price_row"
+        android:layout_width="218dp"
+        android:layout_height="wrap_content"
+
+        android:layout_alignBottom="@+id/row_user_photo"
+
+        android:layout_alignStart="@+id/product_image_row"
+        android:fontFamily="serif"
+        android:text="Price"
+        android:textSize="18dp" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/row_user_photo"
+        android:layout_width="65dp"
+        android:layout_height="63dp"
+        android:layout_alignEnd="@+id/product_image_row"
+
+
+        android:layout_below="@+id/product_image_row"
+        android:layout_weight="1"
+        android:scaleType="centerCrop"
+        android:src="@drawable/avatar"
+        app:civ_border_color="#ffffff"
+        app:civ_border_width="2dp" />
+
+    <ImageView
+        android:id="@+id/shadow"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/Product_name_row"
+
+        android:layout_marginTop="-28dp"
+        app:srcCompat="@drawable/shadow_style" />
+
+
+</RelativeLayout>

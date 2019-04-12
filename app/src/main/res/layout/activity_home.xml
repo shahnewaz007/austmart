@@ -6,4 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".activities.HomeActivity">
 
+
+    <pl.droidsonroids.gif.GifTextView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/loading"
+        tools:layout_editor_absoluteX="155dp"
+        tools:layout_editor_absoluteY="279dp" />
+
 </android.support.constraint.ConstraintLayout>

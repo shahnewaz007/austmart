@@ -1,6 +1,8 @@
 package com.ayon.austmart.activities;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.support.annotation.NonNull;
@@ -73,8 +75,8 @@ public class LoginActivity extends AppCompatActivity {
                 else
                 {
                     signIn(mail,password);
-                    btnLogin.setVisibility(View.VISIBLE);
-                    loginProgressbar.setVisibility(View.INVISIBLE);
+                    btnLogin.setVisibility(View.INVISIBLE);
+                    loginProgressbar.setVisibility(View.VISIBLE);
                 }
 
 
@@ -100,6 +102,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 else
                     showMessage(task.getException().getMessage());
+                 loginProgressbar.setVisibility(View.INVISIBLE);
+                 btnLogin.setVisibility(View.VISIBLE);
 
             }
         });
@@ -134,6 +138,39 @@ public class LoginActivity extends AppCompatActivity {
             finish();
 
         }
+    }
+
+
+
+    @Override
+    public void onBackPressed()
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        builder.setMessage("Are you sure you want to exit?");
+        builder.setCancelable(true);
+
+        builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                finish();
+
+            }
+        });
+
+        builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
     }
 
 

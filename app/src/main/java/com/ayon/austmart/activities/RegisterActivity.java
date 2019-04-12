@@ -1,6 +1,8 @@
 package com.ayon.austmart.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -67,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-
+        ImgUserPhoto = findViewById(R.id.avatar);
 
 
 
@@ -87,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
                     showMessage("Please verify full fields!!");
 
                     regBtn.setVisibility(View.VISIBLE);
-                    regBtn.setVisibility(View.INVISIBLE);
+                    loadingProgress.setVisibility(View.INVISIBLE);
 
 
 
@@ -96,9 +98,22 @@ public class RegisterActivity extends AppCompatActivity {
 
                 else
                 {
-                    //Everything is ok..
 
-                    createUserAccount(email,name,password);
+                    if(pickedImgUri == null)
+                    {
+
+                        showMessage("Please select an image");
+                        regBtn.setVisibility(View.VISIBLE);
+                        loadingProgress.setVisibility(View.INVISIBLE);
+
+                    }
+                    else {
+                        createUserAccount(email, name, password);
+
+                        //Everything is ok..
+                    }
+
+
 
 
                 }
@@ -106,7 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
-        ImgUserPhoto = findViewById(R.id.avatar);
+
         ImgUserPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,46 +179,53 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void updateUserInfo(final String name, Uri pickedImgUri, final FirebaseUser currentUser){
 
-        StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("user_photos");
-        final StorageReference imageFilePath = mStorage.child(pickedImgUri.getLastPathSegment());
-        imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //image uploaded successfully
-                //getting image url
-
-                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                       // uri contains user image url
-                        UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(name)
-                                .setPhotoUri(uri)
-                                .build();
 
 
-                        currentUser.updateProfile(profileUpdate)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
 
-                                        if(task.isSuccessful())
-                                        {
-                                            //user info updated successfully
 
-                                            showMessage("Register Complete!");
-                                            updateUI();
+
+
+
+            StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("user_photos");
+            final StorageReference imageFilePath = mStorage.child(pickedImgUri.getLastPathSegment());
+            imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    //image uploaded successfully
+                    //getting image url
+
+                    imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            // uri contains user image url
+                            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name)
+                                    .setPhotoUri(uri)
+                                    .build();
+
+
+                            currentUser.updateProfile(profileUpdate)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            if (task.isSuccessful()) {
+                                                //user info updated successfully
+
+                                                showMessage("Register Complete!");
+                                                updateUI();
+                                            }
+
                                         }
-
-                                    }
-                                });
+                                    });
 
 
-                    }
-                });
+                        }
+                    });
 
-            }
-        });
+                }
+            });
+
 
 
 
@@ -265,8 +287,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK && requestCode == REQUESCODE && data !=null)
-        {
+        if(data !=null) {
             //user has successfully picked an image...
             //saving its reference to a Uri variable
 
@@ -275,5 +296,43 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         }
+        else{
+            // USER HAS NOT PICKED IMAGE
+
+        }
+    }
+
+
+
+
+    @Override
+    public void onBackPressed()
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+        builder.setMessage("Are you sure you want to exit?");
+        builder.setCancelable(true);
+
+        builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                finish();
+
+            }
+        });
+
+        builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
     }
 }
