@@ -27,7 +27,8 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
         <activity android:name=".activities.ProductDetailsActivity" />
-        <activity android:name=".activities.Chat.MessageActivity"></activity>
+        <activity android:name=".activities.Chat.MessageActivity" />
+        <activity android:name=".activities.WishListProductdetailsActivity"></activity>
     </application>
 
 </manifest>

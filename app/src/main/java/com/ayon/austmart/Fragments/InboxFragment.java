@@ -3,12 +3,28 @@ package com.ayon.austmart.Fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ayon.austmart.Adapters.PostAdapter;
+import com.ayon.austmart.Models.Chat;
+import com.ayon.austmart.Models.Post;
 import com.ayon.austmart.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +43,18 @@ public class InboxFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private RecyclerView mRecyclerView;
+    private PostAdapter mPostAdapter;
+    private List<Post>users;
+
+    FirebaseUser fuser;
+    DatabaseReference mReference;
+
+    private List<String>userList;
+
+
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,9 +92,105 @@ public class InboxFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_inbox, container, false);
+
+       View view = inflater.inflate(R.layout.fragment_inbox, container, false);
+
+
+       mRecyclerView = view.findViewById(R.id.recycler_view_inbox);
+       mRecyclerView.setHasFixedSize(true);
+       mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+       fuser = FirebaseAuth.getInstance().getCurrentUser();
+
+       userList = new ArrayList<>();
+       mReference = FirebaseDatabase.getInstance().getReference("Chats");
+
+       mReference.addValueEventListener(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               userList.clear();
+
+               for(DataSnapshot snapshot  : dataSnapshot.getChildren()){
+                   Chat chat = snapshot.getValue(Chat.class);
+
+
+                   if(chat.getSender().equals(fuser.getUid())){
+                       userList.add(chat.getReceiver());
+                   }
+
+                   if(chat.getReceiver().equals(fuser.getUid())){
+                       userList.add(chat.getSender());
+                   }
+               }
+
+              // readChats();
+
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+           }
+       });
+
+
+
+        return view;
     }
+
+/*
+    private void readChats()
+    {
+        users= new ArrayList<>();
+        mReference = FirebaseDatabase.getInstance().getReference("Product Posts");
+
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                users.clear();
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+                    Post mpost = snapshot.getValue(Post.class);
+
+                    for(String id : userList)
+                    {
+                        mpost.getUserID().equals(id){
+                            if(users.size()!=0)
+                            {
+                                for(Post post1 : users){
+                                    if(!mpost.getUserID().equals(post1.getUserID())){
+                                        users.add(mpost);
+                                    }
+                                }
+                            }
+
+                            else
+                            {
+                                users.add(mpost);
+                            }
+                    }
+
+                    }
+
+
+                }
+
+
+            }
+
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -74,6 +198,7 @@ public class InboxFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+    */
 
     @Override
     public void onAttach(Context context) {

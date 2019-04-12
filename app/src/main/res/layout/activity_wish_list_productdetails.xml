@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ProductDetailsActivity"
+    tools:context=".activities.WishListProductdetailsActivity"
     android:background="@drawable/background2">
 
 
@@ -105,40 +105,21 @@
             android:textSize="18dp" />
 
         <ImageView
-        android:id="@+id/details_message_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/msgicon"
-        android:layout_below="@id/details_seller_name"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"/>
-
+            android:id="@+id/details_message_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/msgicon"
+            android:layout_below="@id/details_seller_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
 
         <ImageView
-            android:id="@+id/addtowishlist"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:id="@+id/imageView_remove_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/details_product_image"
-
             android:layout_alignTop="@+id/details_product_image"
-            android:src="@drawable/add" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            app:srcCompat="@android:drawable/btn_dialog" />
 
 
     </RelativeLayout>
