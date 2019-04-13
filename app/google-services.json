@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "913946574229",
+    "firebase_url": "https://austmart-2d605.firebaseio.com",
+    "project_id": "austmart-2d605",
+    "storage_bucket": "austmart-2d605.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913946574229:android:82176aeebf628bc6",
+        "android_client_info": {
+          "package_name": "com.ayon.austmart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913946574229-9pa3noshmmhn5a957v8tp3fgej95t8gi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBsF3qZk8DO_7dmoJzmGIVssmu6R9gr4o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
