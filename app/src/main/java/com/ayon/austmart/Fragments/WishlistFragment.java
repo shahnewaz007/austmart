@@ -15,6 +15,8 @@ import com.ayon.austmart.Adapters.PostAdapter;
 import com.ayon.austmart.Adapters.WishListPostAdapter;
 import com.ayon.austmart.Models.Post;
 import com.ayon.austmart.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +46,8 @@ public class WishlistFragment extends Fragment {
 
     private HomeFragment.OnFragmentInteractionListener mListener;
 
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
 
     RecyclerView postRecyclerView;
 
@@ -101,12 +105,17 @@ public class WishlistFragment extends Fragment {
        View fragmentView =  inflater.inflate(R.layout.fragment_wishlist, container, false);
 
         postRecyclerView = fragmentView.findViewById(R.id.PostRV);
+        mAuth =FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
 
 
         postRecyclerView.setLayoutManager(lin);
         postRecyclerView.setHasFixedSize(true);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference("Wish List Product Posts");
+
+        String wishlist = currentUser.getUid()+" "+currentUser.getDisplayName()+" Wish List";
+
+        mDatabaseReference = mFirebaseDatabase.getReference(wishlist);
 
 
 
