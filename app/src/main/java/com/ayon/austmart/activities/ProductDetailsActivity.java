@@ -172,7 +172,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     private void addPost(Post post) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Wish List Product Posts").push();
+        String wishlist = currentUser.getUid()+" "+currentUser.getDisplayName()+" Wish List";
+
+        DatabaseReference myRef = database.getReference(wishlist).push();
 
         //get unique id and update post key
 
