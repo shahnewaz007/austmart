@@ -1,6 +1,8 @@
 package com.ayon.austmart.activities;
 
 import android.content.Intent;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ayon.austmart.Fragments.HomeFragment;
+import com.ayon.austmart.Fragments.WishlistFragment;
 import com.ayon.austmart.Models.Post;
 import com.ayon.austmart.R;
 import com.ayon.austmart.activities.Chat.MessageActivity;
@@ -75,6 +79,8 @@ public class WishListProductdetailsActivity extends AppCompatActivity {
         final String userName = getIntent().getExtras().getString("User Name");
         txtSellerName.setText(userName);
 
+        final String postKey = getIntent().getExtras().getString("Key");
+
         final String userID = getIntent().getExtras().getString("UserID");
 
 
@@ -126,7 +132,7 @@ public class WishListProductdetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getApplicationContext(), "Added to Wish liLst", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Removed From wish List", Toast.LENGTH_LONG).show();
 
 
                 //now creating post object
@@ -140,7 +146,7 @@ public class WishListProductdetailsActivity extends AppCompatActivity {
 
                 //upload post to firebase data base
 
-                addPost(post);
+                addPost(post, postKey);
 
 
             }
@@ -168,28 +174,22 @@ public class WishListProductdetailsActivity extends AppCompatActivity {
 
 
 
-    private void addPost(Post post) {
+    private void addPost(Post post, String postKey) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Wish List Product Posts").push();
 
-        //get unique id and update post key
+        String wishlist = currentUser.getUid()+" "+currentUser.getDisplayName()+" Wish List";
+        //DatabaseReference myRef = database.getReference(wishlist).removeValue((DatabaseReference.CompletionListener) post);
 
-        String Key = myRef.getKey();
-        post.setPostKey(Key);
+        DatabaseReference ref = database.getReference();
 
-        //add post key to firebase database
 
-        myRef.setValue(post).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
+        ref.child(wishlist).child(postKey).removeValue();
 
-                showMessage("Added to Wish List!");
+
+       super.onBackPressed();
 
 
 
-
-            }
-        });
     }
 
 

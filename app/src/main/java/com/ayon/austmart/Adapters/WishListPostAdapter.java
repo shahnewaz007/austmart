@@ -100,6 +100,7 @@ public class WishListPostAdapter extends RecyclerView.Adapter<WishListPostAdapte
                     productDetailsActivity.putExtra("User Photo",mData.get(position).getUserPhoto());
                     productDetailsActivity.putExtra("productPrice",mData.get(position).getPrice());
                     productDetailsActivity.putExtra("UserID",mData.get(position).getUserID());
+                    productDetailsActivity.putExtra("Key",mData.get(position).getPostKey());
 
                     productDetailsActivity.putExtra("User Name",mData.get(position).getUserName());
 

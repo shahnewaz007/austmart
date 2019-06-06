@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
+import com.ayon.austmart.Models.User;
 import com.ayon.austmart.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,6 +29,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -49,6 +52,9 @@ public class RegisterActivity extends AppCompatActivity {
     private Intent homeIntent;
 
     private FirebaseAuth mAuth;
+
+
+    FirebaseUser currentUser;
 
 
 
@@ -233,12 +239,40 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void updateUI() {
 
+        mAuth =FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        User user = new User(currentUser.getUid(), currentUser.getPhotoUrl().toString(),currentUser.getDisplayName());
+
+        addUser(user);
+
           homeIntent = new Intent(getApplicationContext(), Home.class);
     startActivity(homeIntent);
     finish();
 
 
     }
+
+
+
+    private void addUser(User user) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Users").push();
+
+
+        myRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+                showMessage("Users added");
+
+
+            }
+        });
+
+    }
+
+
 
     //message show
     private void showMessage(String message) {

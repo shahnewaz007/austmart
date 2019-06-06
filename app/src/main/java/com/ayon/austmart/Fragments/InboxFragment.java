@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ayon.austmart.Adapters.PostAdapter;
+import com.ayon.austmart.Adapters.UserAdapter;
 import com.ayon.austmart.Models.Chat;
 import com.ayon.austmart.Models.Post;
+import com.ayon.austmart.Models.User;
 import com.ayon.austmart.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,10 +47,11 @@ public class InboxFragment extends Fragment {
     private String mParam2;
 
     private RecyclerView mRecyclerView;
-    private PostAdapter mPostAdapter;
-    private List<Post>users;
+    private UserAdapter mUserAdapter;
+    private List<User>users;
 
-    FirebaseUser fuser;
+
+    FirebaseUser currentUser;
     DatabaseReference mReference;
 
     private List<String>userList;
@@ -97,10 +100,19 @@ public class InboxFragment extends Fragment {
 
 
        mRecyclerView = view.findViewById(R.id.recycler_view_inbox);
+
        mRecyclerView.setHasFixedSize(true);
+
+
        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-       fuser = FirebaseAuth.getInstance().getCurrentUser();
+
+
+
+
+
+
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
        userList = new ArrayList<>();
        mReference = FirebaseDatabase.getInstance().getReference("Chats");
@@ -114,16 +126,22 @@ public class InboxFragment extends Fragment {
                    Chat chat = snapshot.getValue(Chat.class);
 
 
-                   if(chat.getSender().equals(fuser.getUid())){
+                   if(chat.getSender().equals(currentUser.getUid())){
                        userList.add(chat.getReceiver());
                    }
 
-                   if(chat.getReceiver().equals(fuser.getUid())){
+                   if(chat.getReceiver().equals(currentUser.getUid())){
                        userList.add(chat.getSender());
                    }
+/*
+                   userList.add(chat.getReceiver());
+                   userList.add(chat.getSender());
+                   */
+
+
                }
 
-              // readChats();
+               readChats();
 
            }
 
@@ -138,11 +156,15 @@ public class InboxFragment extends Fragment {
         return view;
     }
 
-/*
+
+
     private void readChats()
     {
         users= new ArrayList<>();
-        mReference = FirebaseDatabase.getInstance().getReference("Product Posts");
+        mReference = FirebaseDatabase.getInstance().getReference("Users");
+
+
+
 
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -151,30 +173,61 @@ public class InboxFragment extends Fragment {
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
 
-                    Post mpost = snapshot.getValue(Post.class);
+                    User muser = snapshot.getValue(User.class);
+
 
                     for(String id : userList)
                     {
-                        mpost.getUserID().equals(id){
+
+                        if(muser.getUserId().equals(id)){
                             if(users.size()!=0)
                             {
-                                for(Post post1 : users){
-                                    if(!mpost.getUserID().equals(post1.getUserID())){
-                                        users.add(mpost);
+                                /*
+                                for(User user2 : users){
+                                    if(!muser.getUserId().equals(user2.getUserId())){
+
+                                        users.add(muser);
                                     }
                                 }
+                                */
+
+
+
+                                for(User user1 : users)
+                                {
+
+                                    if(muser.getUserId().equals(user1.getUserId())){
+
+
+                                    }
+                                    else
+                                    {
+                                        users.add(muser);
+                                    }
+                                }
+
+
                             }
 
                             else
                             {
-                                users.add(mpost);
+
+                                users.add(muser);
+
+
                             }
-                    }
+                        }
+
+
+
 
                     }
 
 
                 }
+                mUserAdapter = new UserAdapter(getContext(),users);
+                mRecyclerView.setAdapter(mUserAdapter);
+
 
 
             }
@@ -188,6 +241,16 @@ public class InboxFragment extends Fragment {
         });
 
 
+
+
+
+
+
+
+
+
+
+
     }
 
 
@@ -198,7 +261,7 @@ public class InboxFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
-    */
+
 
     @Override
     public void onAttach(Context context) {
