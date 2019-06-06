@@ -9,9 +9,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.ayon.austmart.Adapters.PostAdapter;
 import com.ayon.austmart.Models.Post;
@@ -21,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -47,7 +53,7 @@ public class HomeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
 
-    RecyclerView postRecyclerView;
+    RecyclerView postRecyclerView, searchRecyclerView;
 
     PostAdapter postAdapter;
 
@@ -55,6 +61,11 @@ public class HomeFragment extends Fragment {
     DatabaseReference mDatabaseReference;
 
     List<Post>PostList;
+
+    private EditText productSearch;
+    private Button productSearchButton;
+    private Button productSearchExitButton;
+    private LinearLayout searchbar;
 
 
 
@@ -110,6 +121,11 @@ public class HomeFragment extends Fragment {
         View fragmentView = inflater.inflate(R.layout.fragment_home,container,false);
 
         postRecyclerView = fragmentView.findViewById(R.id.PostRV);
+        //searchRecyclerView = fragmentView.findViewById(R.id.SearchRV);
+        productSearch = fragmentView.findViewById(R.id.product_search);
+        productSearchButton = fragmentView.findViewById(R.id.product_search_button);
+        searchbar =fragmentView.findViewById(R.id.searchbar1);
+        productSearchExitButton = fragmentView.findViewById(R.id.product_search_exit_button);
 
         /*
         postRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -122,14 +138,125 @@ public class HomeFragment extends Fragment {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference("Product Posts");
 
+        productSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchbar.setVisibility(View.VISIBLE);
+
+                String searchProduct = productSearch.getText().toString();
+
+                if(TextUtils.isEmpty(searchProduct)){
+                    Toast.makeText(getContext(),"Please write a product name to search",Toast.LENGTH_SHORT).show();
+                } else {
+                    //searchRecyclerView.setVisibility(View.VISIBLE);
+                    postRecyclerView.setVisibility(View.VISIBLE);
+                    SearchForProduct(searchProduct);
+                }
+            }
+        });
+
+
+
+        productSearchExitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchbar.setVisibility(View.INVISIBLE);
+                productSearch.setText("");
+
+
+                mDatabaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        PostList = new ArrayList<>();
+
+                        for(DataSnapshot postsnap: dataSnapshot.getChildren()){
+
+                            Post post = postsnap.getValue(Post.class);
+                            PostList.add(post);
+
+                        }
+
+
+                        postAdapter = new PostAdapter(getActivity(),PostList);
+                        postRecyclerView.setAdapter(postAdapter);
+
+
+
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         return fragmentView;
+
+    }
+
+    private void SearchForProduct(String searchProduct) {
+        Toast.makeText(getContext(),"Searching",Toast.LENGTH_SHORT).show();
+        Query SearchForProduct = mDatabaseReference.orderByChild("productName").startAt(searchProduct).endAt(searchProduct+"\uf8ff");
+        SearchForProduct.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                PostList = new ArrayList<>();
+
+                for(DataSnapshot postsnap: dataSnapshot.getChildren()){
+
+                    Post post = postsnap.getValue(Post.class);
+                    PostList.add(post);
+
+                }
+
+
+                postAdapter = new PostAdapter(getActivity(),PostList);
+                postRecyclerView.setAdapter(postAdapter);
+                //searchRecyclerView.setAdapter(postAdapter);
+
+
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
 
     @Override
-    public void onStart() {
+    public void onStart(){
         super.onStart();
+        //postRecyclerView.setVisibility(View.VISIBLE);
+        //searchRecyclerView.setVisibility(View.INVISIBLE);
 
         //Get List Post from database
 

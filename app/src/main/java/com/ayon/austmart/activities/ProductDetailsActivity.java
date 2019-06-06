@@ -137,7 +137,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 Post post = new Post(productTitle,
                         productDescription,
                         productPrice,
-                        currentUser.getUid(), productImage,
+                        userID, productImage,
                         sellerImg,userName);
 
                 //upload post to firebase data base

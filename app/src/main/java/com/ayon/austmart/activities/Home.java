@@ -11,7 +11,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -29,13 +28,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ayon.austmart.Fragments.AboutUsFragment;
 import com.ayon.austmart.Fragments.HomeFragment;
 import com.ayon.austmart.Fragments.InboxFragment;
+import com.ayon.austmart.Fragments.UserList;
 import com.ayon.austmart.Fragments.WishlistFragment;
 import com.ayon.austmart.Models.Post;
 import com.ayon.austmart.R;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,8 +44,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.util.Currency;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -418,7 +416,18 @@ public class Home extends AppCompatActivity
             getSupportActionBar().setTitle("Inbox");
             getSupportFragmentManager().beginTransaction().replace(R.id.container, new InboxFragment()).commit();
 
-        } else if (id == R.id.nav_signOut) {
+        } else if (id == R.id.about_us) {
+
+            getSupportActionBar().setTitle("About us");
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new AboutUsFragment()).commit();
+
+        }else if (id == R.id.user_profile) {
+
+            getSupportActionBar().setTitle("User Profile");
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new UserList()).commit();
+
+        }
+        else if (id == R.id.nav_signOut) {
 
             FirebaseAuth.getInstance().signOut();
             Intent baseActivity = new Intent(this, BaseActivity.class);

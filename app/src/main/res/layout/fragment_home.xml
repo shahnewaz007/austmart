@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,12 +8,66 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/PostRV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        />
+
+    <LinearLayout
+        android:id="@+id/searchbar1"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="#f8d1b132"
+        android:padding="5dp"
+        android:layout_alignTop="@id/PostRV"
+        android:visibility="invisible"
+        >
+
+        <Button
+            android:id="@+id/product_search_exit_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+
+            android:layout_toLeftOf="@id/product_search"
+            android:background="@drawable/crossicon"
+
+            />
+
+        <EditText
+            android:id="@+id/product_search"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
 
 
-</LinearLayout>
+            android:background="@drawable/reg_editext_style"
+
+            android:hint="Search Here" />
+
+
+
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/product_search_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/searchicon" />
+
+
+
+
+
+
+
+</RelativeLayout>

@@ -16,10 +16,28 @@
             android:id="@+id/nav_Inbox"
             android:icon="@drawable/ic_message_black_24dp"
             android:title="Inbox" />
+
+
+        <item
+            android:id="@+id/about_us"
+            android:title="About us"
+            android:icon="@drawable/ic_person_black_24dp"
+            />
+
+        <item
+            android:id="@+id/user_profile"
+            android:title="User Profile"
+            android:icon="@drawable/ic_contact_mail_black_24dp"
+            />
+
         <item
             android:id="@+id/nav_signOut"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:title="Sign Out" />
+
+
+
+
     </group>
 
 
