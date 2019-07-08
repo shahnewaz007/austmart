@@ -10,12 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.ayon.austmart.Adapters.PostAdapter;
 import com.ayon.austmart.Adapters.UserAdapter;
 import com.ayon.austmart.Models.Chat;
 import com.ayon.austmart.Models.Post;
 import com.ayon.austmart.Models.User;
+import com.ayon.austmart.Notifications.Token;
 import com.ayon.austmart.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,8 +26,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,12 +53,15 @@ public class InboxFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private UserAdapter mUserAdapter;
     private List<User>users;
+    private List<User>dummyusers;
+    private List<User>dummyusers2;
 
 
     FirebaseUser currentUser;
     DatabaseReference mReference;
 
     private List<String>userList;
+    private List<String>userListRev;
 
 
 
@@ -96,15 +103,20 @@ public class InboxFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        LinearLayoutManager lin = new LinearLayoutManager(getActivity());
+        lin.setStackFromEnd(true);
+        lin.setReverseLayout(true);
+
        View view = inflater.inflate(R.layout.fragment_inbox, container, false);
 
 
        mRecyclerView = view.findViewById(R.id.recycler_view_inbox);
 
+        mRecyclerView.setLayoutManager(lin);
        mRecyclerView.setHasFixedSize(true);
 
 
-       mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
 
 
 
@@ -115,31 +127,40 @@ public class InboxFragment extends Fragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
        userList = new ArrayList<>();
+        userListRev = new ArrayList<>();
+
        mReference = FirebaseDatabase.getInstance().getReference("Chats");
 
        mReference.addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                userList.clear();
+               userListRev.clear();
 
                for(DataSnapshot snapshot  : dataSnapshot.getChildren()){
                    Chat chat = snapshot.getValue(Chat.class);
 
 
-                   if(chat.getSender().equals(currentUser.getUid())){
-                       userList.add(chat.getReceiver());
-                   }
+                       if (chat.getSender().equals(currentUser.getUid())) {
 
-                   if(chat.getReceiver().equals(currentUser.getUid())){
-                       userList.add(chat.getSender());
-                   }
-/*
-                   userList.add(chat.getReceiver());
-                   userList.add(chat.getSender());
-                   */
+                               userList.add(chat.getReceiver());
+                       }
 
+
+                       if (chat.getReceiver().equals(currentUser.getUid())) {
+
+                               userList.add(chat.getSender());
+                       }
 
                }
+              Collections.reverse(userList);
+
+               for(String ID : userList)
+               {
+                   if(!userListRev.contains(ID))
+                       userListRev.add(ID);
+               }
+
 
                readChats();
 
@@ -151,16 +172,31 @@ public class InboxFragment extends Fragment {
            }
        });
 
-
+        updateToken(FirebaseInstanceId.getInstance().getToken());
 
         return view;
+    }
+
+
+    private void updateToken(String token)
+    {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+
+        Token token1 = new Token(token);
+        reference.child(currentUser.getUid()).setValue(token1);
+
     }
 
 
 
     private void readChats()
     {
+
         users= new ArrayList<>();
+        dummyusers = new ArrayList<>();
+        dummyusers2 = new ArrayList<>();
+
+
         mReference = FirebaseDatabase.getInstance().getReference("Users");
 
 
@@ -171,62 +207,37 @@ public class InboxFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 users.clear();
 
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-
-                    User muser = snapshot.getValue(User.class);
 
 
-                    for(String id : userList)
+                for(String id : userListRev){
+                     int counter =0;
+
+
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren())
                     {
+                        User muser = snapshot.getValue(User.class);
+
+
 
                         if(muser.getUserId().equals(id)){
-                            if(users.size()!=0)
-                            {
-                                /*
-                                for(User user2 : users){
-                                    if(!muser.getUserId().equals(user2.getUserId())){
+                            users.add(muser);
 
-                                        users.add(muser);
-                                    }
-                                }
-                                */
-
-
-
-                                for(User user1 : users)
-                                {
-
-                                    if(muser.getUserId().equals(user1.getUserId())){
-
-
-                                    }
-                                    else
-                                    {
-                                        users.add(muser);
-                                    }
-                                }
-
-
-                            }
-
-                            else
-                            {
-
-                                users.add(muser);
-
-
-                            }
                         }
-
-
 
 
                     }
 
 
                 }
-                mUserAdapter = new UserAdapter(getContext(),users);
+
+
+
+
+
+                Collections.reverse(users);
+                mUserAdapter = new UserAdapter(getContext(),users,true);
                 mRecyclerView.setAdapter(mUserAdapter);
+
 
 
 
@@ -239,16 +250,6 @@ public class InboxFragment extends Fragment {
 
             }
         });
-
-
-
-
-
-
-
-
-
-
 
 
     }

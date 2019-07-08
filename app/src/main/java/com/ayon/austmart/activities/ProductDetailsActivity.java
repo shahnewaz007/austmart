@@ -1,6 +1,10 @@
 package com.ayon.austmart.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +36,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
 
-    ImageView imgSeller, imgproduct, imgMessage,addwish;
+    ImageView imgSeller, imgproduct, imgMessage,addwish, removePost;
     TextView txtProductName, txtProductPrice, txtdate, txtProductDetails, txtSellerName;
 
     @Override
@@ -43,6 +47,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
         imgproduct = findViewById(R.id.details_product_image);
         imgSeller = findViewById(R.id.details_seller_user_photo);
         imgMessage = findViewById(R.id.details_message_icon);
+        removePost = findViewById(R.id.Post_details_removePost);
+        removePost.setVisibility(View.INVISIBLE);
 
         txtdate =findViewById(R.id.details_date);
         txtProductName = findViewById(R.id.details_Product_name);
@@ -149,6 +155,83 @@ public class ProductDetailsActivity extends AppCompatActivity {
         });
 
 
+        if(userID.equals(currentUser.getUid()))
+
+        {
+            removePost.setVisibility(View.VISIBLE);
+
+
+            removePost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(ProductDetailsActivity.this);
+                        builder.setMessage("Are you sure you want to delete this post?");
+                        builder.setCancelable(true);
+
+                        builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+
+                                Toast.makeText(getApplicationContext(), "Removed Your Post", Toast.LENGTH_LONG).show();
+
+
+                                //now creating post object
+
+
+                                Post post = new Post(productTitle,
+                                        productDescription,
+                                        productPrice,
+                                        currentUser.getUid(), productImage,
+                                        currentUser.getPhotoUrl().toString(), currentUser.getDisplayName().toString());
+
+                                //upload post to firebase data base
+
+                                remove_Post(post, postKey);
+
+                            }
+                        });
+
+                        builder.setPositiveButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+
+                            }
+                        });
+
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                }
+            });
+
+        }
+
+
+
+
 
 
 
@@ -164,6 +247,25 @@ public class ProductDetailsActivity extends AppCompatActivity {
         calendar.setTimeInMillis(time);
         String date = android.text.format.DateFormat.format("dd-MM-yyyy",calendar).toString();
         return date;
+
+
+    }
+
+
+    private void remove_Post(Post post, String postKey) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        String product_post = "Product Posts";
+
+
+        DatabaseReference ref = database.getReference();
+
+
+        ref.child(product_post).child(postKey).removeValue();
+
+
+        super.onBackPressed();
+
 
 
     }

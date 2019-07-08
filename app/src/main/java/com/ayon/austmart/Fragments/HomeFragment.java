@@ -135,6 +135,8 @@ public class HomeFragment extends Fragment {
 
         postRecyclerView.setLayoutManager(lin);
         postRecyclerView.setHasFixedSize(true);
+
+
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference("Product Posts");
 
@@ -216,9 +218,11 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void SearchForProduct(String searchProduct) {
+    private void SearchForProduct(String searchProductSample) {
+        String searchProduct = searchProductSample.toLowerCase();
+
         Toast.makeText(getContext(),"Searching",Toast.LENGTH_SHORT).show();
-        Query SearchForProduct = mDatabaseReference.orderByChild("productName").startAt(searchProduct).endAt(searchProduct+"\uf8ff");
+        Query SearchForProduct = mDatabaseReference.orderByChild("search").startAt(searchProduct).endAt(searchProduct+"\uf8ff");
         SearchForProduct.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
