@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -35,6 +36,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.HashMap;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -50,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar loadingProgress;
     private Button regBtn;
     private Intent homeIntent;
+    private TextView login_redirect;
 
     private FirebaseAuth mAuth;
 
@@ -73,9 +77,18 @@ public class RegisterActivity extends AppCompatActivity {
         regBtn = findViewById(R.id.buttonRegister);
         loadingProgress.setVisibility(View.INVISIBLE);
 
+        login_redirect = findViewById(R.id.login_redirect);
+
         mAuth = FirebaseAuth.getInstance();
 
         ImgUserPhoto = findViewById(R.id.avatar);
+        login_redirect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
+                finish();
+            }
+        });
 
 
 
@@ -242,9 +255,32 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth =FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
 
-        User user = new User(currentUser.getUid(), currentUser.getPhotoUrl().toString(),currentUser.getDisplayName());
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Users").child(currentUser.getUid());
 
-        addUser(user);
+        HashMap<String , String> hashMap = new HashMap<>();
+
+        hashMap.put("status", "Offline1");
+        hashMap.put("userId", currentUser.getUid());
+        hashMap.put("userName", currentUser.getDisplayName());
+        hashMap.put("userPhoto", currentUser.getPhotoUrl().toString());
+
+
+        myRef.setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+                showMessage("Users added");
+
+
+            }
+        });
+
+
+
+
+
+
 
           homeIntent = new Intent(getApplicationContext(), Home.class);
     startActivity(homeIntent);
@@ -253,14 +289,21 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-
+/*
 
     private void addUser(User user) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Users").push();
+        DatabaseReference myRef = database.getReference("Users").child(currentUser.getUid());
+
+        HashMap<String , String> hashMap = new HashMap<>();
+
+        hashMap.put("status", user.getStatus());
+        hashMap.put("userId", user.getUserId());
+        hashMap.put("userName", user.getUserName());
+        hashMap.put("userPhoto", user.getUserPhoto());
 
 
-        myRef.setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+        myRef.setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
 
@@ -271,6 +314,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
     }
+    */
 
 
 
@@ -342,6 +386,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
         builder.setMessage("Are you sure you want to exit?");
         builder.setCancelable(true);
@@ -366,6 +411,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+
+
+
 
 
     }

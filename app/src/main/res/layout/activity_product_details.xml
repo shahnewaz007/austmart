@@ -73,7 +73,7 @@
             android:layout_marginRight="20dp"
             android:fontFamily="serif"
             android:text="Details"
-            android:textSize="18dp" />
+            android:textSize="18sp" />
 
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -123,22 +123,13 @@
             android:layout_alignTop="@+id/details_product_image"
             android:src="@drawable/add" />
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <ImageView
+            android:id="@+id/Post_details_removePost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/details_product_image"
+            android:layout_alignTop="@+id/details_product_image"
+            app:srcCompat="@android:drawable/btn_dialog" />
 
 
     </RelativeLayout>

@@ -2,7 +2,15 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="70dp">
+    android:layout_height="80dp">
+
+
+
+
+
+
+
+
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/avatar_row_user"
@@ -15,15 +23,48 @@
 
         app:civ_border_width="1dp" />
 
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/user_on"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:visibility="gone"
+
+        android:layout_alignEnd="@+id/avatar_row_user"
+        android:layout_below="@+id/username_row"
+        android:src="@drawable/yellow"
+        app:civ_border_color="#4cec0d"
+        app:civ_border_width="1dp"
+        app:civ_circle_background_color="#4cec0d" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/user_off"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:visibility="gone"
+
+
+        android:layout_alignEnd="@+id/avatar_row_user"
+        android:layout_below="@+id/username_row"
+        android:src="@drawable/gray"
+        app:civ_border_color="#444643"
+        app:civ_border_width="1dp"
+         />
+
+
     <TextView
         android:id="@+id/username_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
         android:layout_toRightOf="@+id/avatar_row_user"
         android:text="Name"
-        android:layout_marginStart="5dp"
-        android:layout_centerVertical="true"/>
+
+
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/userid_row"
@@ -32,9 +73,32 @@
         android:layout_marginLeft="0dp"
         android:layout_toRightOf="@+id/avatar_row_user"
         android:text="Name"
+
         android:layout_marginStart="5dp"
         android:layout_centerVertical="true"
         android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/last_msg"
+        android:layout_width="333dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username_row"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/avatar_row_user"
+        android:maxLines="1"
+        android:text=" "
+        android:textColor="#967e7e"
+        android:textStyle="normal" />
+
+
+
+
+
+
+
+
 
 
 

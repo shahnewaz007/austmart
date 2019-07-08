@@ -114,5 +114,14 @@
         android:layout_alignTop="@+id/buttonRegister"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:id="@+id/login_redirect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/progressBarRegister"
+        android:text="I already have an account."
+        android:layout_marginTop="30dp"/>
+
 
 </RelativeLayout>

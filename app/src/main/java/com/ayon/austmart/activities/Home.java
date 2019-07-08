@@ -45,6 +45,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.HashMap;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -57,6 +59,7 @@ public class Home extends AppCompatActivity
     FirebaseAuth mAuth;
         FirebaseUser currentUser;
         Dialog popAddPost;
+        DatabaseReference refrence;
 
         ImageView popupUserPhoto, popupProductImage, popupAddButton;
         TextView popupProductName, popupDescription, popupPrice;
@@ -296,9 +299,11 @@ public class Home extends AppCompatActivity
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Product Posts").push();
 
+
         //get unique id and update post key
 
         String Key = myRef.getKey();
+
         post.setPostKey(Key);
 
         //add post key to firebase database
@@ -319,7 +324,19 @@ public class Home extends AppCompatActivity
                 popAddPost.dismiss();
 
             }
+
+
         });
+
+
+        refrence = FirebaseDatabase.getInstance().getReference("Product Posts").child(Key);
+
+        HashMap<String, Object> hashmap = new HashMap<>();
+
+        hashmap.put("search", post.getProductName().toLowerCase());
+
+        refrence.updateChildren(hashmap);
+
 
 
 
@@ -464,8 +481,27 @@ public class Home extends AppCompatActivity
     }
 
 
+    private void status(String status)
+    {
+        refrence = FirebaseDatabase.getInstance().getReference("Users").child(currentUser.getUid());
+
+        HashMap<String, Object> hashmap = new HashMap<>();
+
+        hashmap.put("status", status);
+
+        refrence.updateChildren(hashmap);
+    }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("Online");
+    }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("Offline");
+    }
 }

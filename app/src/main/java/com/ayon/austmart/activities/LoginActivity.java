@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ayon.austmart.R;
@@ -33,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar loginProgressbar;
     private FirebaseAuth mAuth;
     private Intent homeActivity;
+    private TextView forget_pass;
+    private TextView register_redirect;
 
 
 
@@ -46,12 +49,30 @@ public class LoginActivity extends AppCompatActivity {
         userMail = findViewById(R.id.login_mail);
         userPassword = findViewById(R.id.login_password);
         btnLogin = findViewById(R.id.button_login);
+        forget_pass = findViewById(R.id.forget_pass);
+        register_redirect = findViewById(R.id.register_redirect);
 
         loginProgressbar = findViewById(R.id.login_progressBar);
         loginProgressbar.setVisibility(View.INVISIBLE);
         mAuth = FirebaseAuth.getInstance();
 
        homeActivity = new Intent(this,Home.class );
+
+       register_redirect.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+               finish();
+           }
+       });
+
+
+        forget_pass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+            }
+        });
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +166,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
         builder.setMessage("Are you sure you want to exit?");
         builder.setCancelable(true);
@@ -169,6 +191,9 @@ public class LoginActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+
+
+
 
 
     }

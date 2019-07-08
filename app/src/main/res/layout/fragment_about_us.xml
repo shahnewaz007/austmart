@@ -48,7 +48,7 @@
             android:layout_below="@id/name1"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="26dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:text="17.01.04.102"
             android:textSize="14sp"
             android:textStyle="italic" />
@@ -60,7 +60,7 @@
             android:layout_below="@id/Student_id1"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="26dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="Department of CSE"
             android:textSize="14sp"
             android:textStyle="italic" />
@@ -117,7 +117,7 @@
             android:layout_below="@id/name2"
 
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:text="17.01.04.103"
             android:textSize="14sp"
             android:textStyle="italic" />
@@ -129,7 +129,7 @@
             android:layout_below="@id/Student_id2"
 
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="Department of CSE"
             android:textSize="14sp"
             android:textStyle="italic" />
